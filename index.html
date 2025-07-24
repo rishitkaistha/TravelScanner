@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Travel Buddies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+      color: #333;
+    }
+    header {
+      height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 1px 1px 5px #000;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+    }
+    header h1 {
+      font-size: 3em;
+      z-index: 1;
+      text-align: center;
+    }
+    .search-section {
+      background: linear-gradient(to right, #fffaf0, #f0f8ff);
+      padding: 2rem;
+      margin: 2rem auto;
+      width: 90%;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1;
+    }
+    .search-section form {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      align-items: end;
+    }
+    select, input[type="date"], input[type="number"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      position: relative;
+    }
+    select {
+      appearance: none;
+    }
+    button {
+      padding: 0.75rem;
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #e64a19;
+    }
+    .cities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .city-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .city-card:hover {
+      transform: scale(1.03);
+    }
+    .city-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .city-card .caption {
+      position: absolute;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    .booking-result {
+      background: #ffffff;
+      margin: 2rem auto;
+      width: 90%;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="dynamic-header">
+    <h1>Travel Buddies - Discover India Together</h1>
+  </header>
+
+  <section class="search-section">
+    <form id="bookingForm">
+      <select id="from" required>
+        <option value="">From</option>
+        <option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option>
+        <option>Chennai</option><option>Pune</option><option>Kolkata</option><option>Ahmedabad</option>
+        <option>Lucknow</option><option>Jaipur</option><option>Indore</option><option>Bhopal</option>
+        <option>Patna</option><option>Nagpur</option><option>Chandigarh</option><option>Surat</option>
+        <option>Vadodara</option><option>Coimbatore</option><option>Visakhapatnam</option><option>Ranchi</option>
+        <option>Guwahati</option><option>Raipur</option><option>Thiruvananthapuram</option><option>Dehradun</option>
+        <option>Jodhpur</option><option>Amritsar</option><option>Kanpur</option><option>Varanasi</option>
+        <option>Mysore</option><option>Udaipur</option>
+
+      </select>
+
+      <select id="to" required>
+        <option value="">To</option>
+        <option>Mumbai</option><option>Delhi</option><option>Bangalore</option><option>Hyderabad</option>
+        <option>Chennai</option><option>Pune</option><option>Kolkata</option><option>Ahmedabad</option>
+        <option>Lucknow</option><option>Jaipur</option><option>Indore</option><option>Bhopal</option>
+        <option>Patna</option><option>Nagpur</option><option>Chandigarh</option><option>Surat</option>
+        <option>Vadodara</option><option>Coimbatore</option><option>Visakhapatnam</option><option>Ranchi</option>
+        <option>Guwahati</option><option>Raipur</option><option>Thiruvananthapuram</option><option>Dehradun</option>
+        <option>Jodhpur</option><option>Amritsar</option><option>Kanpur</option><option>Varanasi</option>
+        <option>Mysore</option><option>Udaipur</option>
+
+      </select>
+
+      <input type="date" id="travelDate" required />
+      <input type="number" id="passengers" placeholder="Passengers" min="1" required />
+      <button type="submit">Search</button>
+    </form>
+  </section>
+
+  <div class="booking-result" id="bookingResult"></div>
+
+  <section class="cities-grid">
+    <div class="city-card">
+      <img src="images/delhi.jpg" alt="Delhi">
+      <div class="caption">Delhi - The Heart of India</div>
+    </div>
+    <div class="city-card">
+      <img src="images/mumbai.jpg" alt="Mumbai">
+      <div class="caption">Mumbai - The City That Never Sleeps</div>
+    </div>
+    <div class="city-card">
+      <img src="images/bangalore.jpg" alt="Bangalore">
+      <div class="caption">Bangalore - India’s Silicon Valley</div>
+    </div>
+    <div class="city-card">
+      <img src="images/chennai.jpg" alt="Chennai">
+      <div class="caption">Chennai - The Gateway to the South</div>
+    </div>
+    <div class="city-card">
+      <img src="images/kolkata.jpg" alt="Kolkata">
+      <div class="caption">Kolkata - The City of Joy</div>
+    </div>
+    <div class="city-card">
+      <img src="images/hyderabad.jpg" alt="Hyderabad">
+      <div class="caption">Hyderabad - The City of Pearls</div>
+    </div>
+    <div class="city-card">
+      <img src="images/ahmedabad.jpg" alt="Ahmedabad">
+      <div class="caption">Ahmedabad - A Heritage City</div>
+    </div>
+    <div class="city-card">
+      <img src="images/jaipur.jpg" alt="Jaipur">
+      <div class="caption">Jaipur - The Pink City of Royal Tales</div>
+    </div>
+  </section>
+
+  <script>
+    const header = document.getElementById('dynamic-header');
+    const images = [
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1502920514313-52581002a659?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1600&q=80'
+    ];
+    let index = 0;
+    header.style.backgroundImage = url('${images[0]}');
+    setInterval(() => {
+      index = (index + 1) % images.length;
+      header.style.backgroundImage = url('${images[index]}');
+    }, 5000);
+
+    const form = document.getElementById('bookingForm');
+    const resultDiv = document.getElementById('bookingResult');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const from = document.getElementById('from').value;
+      const to = document.getElementById('to').value;
+      const date = document.getElementById('travelDate').value;
+      const passengers = document.getElementById('passengers').value;
+
+      if (from === to) {
+        resultDiv.innerHTML = "<strong>Please choose different cities to travel.</strong>";
+      } else {
+        resultDiv.innerHTML = `<h2>Booking Summary</h2>
+          <p><strong>From:</strong> ${from}</p>
+          <p><strong>To:</strong> ${to}</p>
+          <p><strong>Date:</strong> ${date}</p>
+          <p><strong>Passengers:</strong> ${passengers}</p>
+          <p>Your search was successful. You will receive an email shortly with best options and pricing.</p>`;
+      }
+      resultDiv.style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>
